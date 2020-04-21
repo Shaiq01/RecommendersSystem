@@ -10,17 +10,26 @@ import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
 import { CardDeck } from 'react-bootstrap'
 import { Link } from '@material-ui/core'
+import { getRecommendedOffers } from '../API/OfferAPI'
+import { getRecommendedOffersByOffer } from '../API/OfferAPI'
 
 
 export default class Availoffer extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-
+            recommended: [],
         }
     }
 
     componentDidMount(){
+        getRecommendedOffers(6).then(data => {
+            this.setState(
+                {
+                    recommended: [...data]
+                }
+            )
+        });
         let data = sessionStorage.getItem('user')
         console.log(data)
     }
@@ -70,29 +79,15 @@ export default class Availoffer extends React.Component {
                 <h1>Related Offers</h1>
                 <br/>
                 <CardDeck className="container" id="r-offers">
-                <Card style={{ width: '18rem' }}>
+                    {this.state.recommended.map(recommended => ( 
+                    <Card style={{ width: '18rem' }} key={recommended.offerid}>
                     <Card.Img variant="top" src={banner} />
                     <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
+                        <Card.Title>{recommended.offertitle}</Card.Title>
                         <Rbtn variant="primary">Go somewhere</Rbtn>
                     </Card.Body>
-                </Card>
-               
-                <Card style={{ width: '18rem' }}>
-                    <Card.Img variant="top" src={banner} />
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        <Rbtn variant="primary">Go somewhere</Rbtn>
-                    </Card.Body>
-                </Card>
-                    <Card style={{ width: '18rem' }}>
-                        <Card.Img variant="top" src={banner} />
-                        <Card.Body>
-                            <Card.Title>Card Title</Card.Title>
-                            <Rbtn className="af-btn" variant="primary">Go somewhere</Rbtn>
-                        </Card.Body>
                     </Card>
-
+                    ))}
                 </CardDeck>
             </div>
            

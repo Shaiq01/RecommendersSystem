@@ -10,5 +10,10 @@ class Offer extends Model
         'offertitle','offerdescription','vid'
     ];
 
+    public function category()
+    {
+        return $this->hasOne('App\Category','catid','catid');
+    }
+
     protected $primaryKey = 'offerid';
 }

@@ -96,3 +96,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     //Route::get('vendorprofile', 'Api\Vendor\Auth\LoginController@vendorprofile');
 
 });
+
+Route::group(['prefix' => 'recommendations'], function(){
+
+    Route::get('getByUser/{id}', 'Api\Recommendations\RecommendationController@index');
+    Route::get('getByOffer/{id}', 'Api\Recommendations\RecommendationController@offer');
+
+});

@@ -72,3 +72,24 @@ export const getvendoroffer = (vid) => {
             return res.data
         })
 }
+
+
+export const getRecommendedOffers = (sid) => {
+    return axios
+        .get(`/api/recommendations/getByUser/${sid}`, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => {
+            return res.data
+        })
+}
+
+export const getRecommendedOffersByOffer = (sid) => {
+    return axios
+        .get(`/api/recommendations/getByOffer/${sid}`, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => {
+            return res.data
+        })
+}
