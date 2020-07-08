@@ -51,17 +51,36 @@ class RecommendationController extends Controller
             ];
         }
 
-        $selectedId = $student_offer[0]['offerid'];
-        $productSimilarity = new ProductSimilarity($recommended_offers);
-        $similarityMatrix  = $productSimilarity->calculateSimilarityMatrix();
-        $recommendedOffers[] = $productSimilarity->getProductsSortedBySimularity($selectedId, $similarityMatrix);
+        foreach($offers as $selected_offer){
+            $selectedId = $selected_offer[0]['offerid'];
+            $productSimilarity = new ProductSimilarity($recommended_offers);
+            $similarityMatrix  = $productSimilarity->calculateSimilarityMatrix();
+            $recommendedOffers[] = $productSimilarity->getProductsSortedBySimularity($selectedId, $similarityMatrix);
+        }
 
-        return $recommendedOffers;
+        $offer_ids = [];
+
+        foreach($offers as $offer){
+            $offer_ids[] = $offer[0]['offerid'];
+        }
+
+        $new_recommended_offers = [];
+        foreach($recommendedOffers as $recommendedOffer){
+            foreach($recommendedOffer as $offer){
+                if(!in_array($offer->offerid,$offer_ids)){
+                    $new_recommended_offers[] = $offer;
+                }
+            }
+        }
+
+        $new_recommended_offers = collect($new_recommended_offers)->unique('offerid')->toArray();
+
+        return $new_recommended_offers;
     }
 
 
     public function offer($id)
-    {       
+    {
         $selected_offer = Offer::where('offerid',$id)->get()->toArray();
         $category = Category::where('catid',$selected_offer[0]['catid'])->get()->pluck('categoryname')->toArray();
         $offer[0]['category'] = $category[0];

@@ -9,6 +9,7 @@ class ProductSimilarity
     protected $products = [];
     protected $userWeight = 1;
     protected $categoryWeight = 1;
+    protected $threshold = 0.4;
 
     public function __construct(array $products)
     {
@@ -55,7 +56,7 @@ class ProductSimilarity
         arsort($similarities);
 
         foreach ($similarities as $productIdKey => $similarity) {
-            if($similarity < 0.4) continue;
+            if($similarity < $this->threshold) continue;
             $id       = intval(str_replace('product_id_', '', $productIdKey));
             $products = array_filter($this->products, function ($product) use ($id) { return $product->offerid === $id; });
             if (! count($products)) {
